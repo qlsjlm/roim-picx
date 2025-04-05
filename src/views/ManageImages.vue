@@ -59,7 +59,7 @@
               </div>
               <p><strong>HTML 格式：</strong></p>
               <div class="cursor-pointer" @click="copyLink(`<img src='${item.url}' alt='${item.name}' />`)">
-                <img src='{{ item.url }}' alt='{{ item.name }}' />
+                <img :src="item.url" :alt="item.name" />
               </div>
               <p><strong>图片 URL：</strong></p>
               <div class="cursor-pointer" @click="copyLink(item.url)">

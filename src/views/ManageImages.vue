@@ -39,6 +39,18 @@
 						@delete="deleteImage(item.key)"
 						mode="uploaded"
 					/>
+
+          <!-- Markdown 格式链接 -->
+          <div class="mt-2">
+            <p><strong>Markdown 格式：</strong></p>
+            <pre><code>![{{ item.name }}]({{ item.url }})</code></pre>
+          </div>
+
+          <!-- HTML 格式链接 -->
+          <div class="mt-2">
+            <p><strong>HTML 格式：</strong></p>
+            <pre><code>&lt;img src="{{ item.url }}" alt="{{ item.name }}" /&gt;</code></pre>
+          </div>
 				</div>
 			</transition-group>
 		</div>

@@ -130,3 +130,40 @@ const listImages = () => {
   }).then((data) => {
     uploadedImages.value = data.list
     if (data.prefixes && data.prefixes.length) {
+      prefixes.value = data.prefixes
+      if (delimiter.value !== '/') {
+        prefixes.value = ['/', ...data.prefixes]
+      }
+    } else {
+      prefixes.value = ['/']
+    }
+  }).catch(() => {})
+		.finally(() => {
+			loading.value = false
+		})
+}
+
+onMounted(() => {
+	listImages()
+})
+
+const deleteImage = (src: string) => {
+	requestDeleteImage({
+    keys: src
+  }).then((res) => {
+		uploadedImages.value = uploadedImages.value.filter((item) => item.key !== res)
+	})
+}
+
+const copyLink = (link: string) => {
+  navigator.clipboard.writeText(link).then(() => {
+    ElMessage.success('复制成功！')
+  }).catch(() => {
+    ElMessage.error('复制失败！')
+  })
+}
+</script>
+
+<style scoped>
+/* 可以根据需要添加一些样式 */
+</style>

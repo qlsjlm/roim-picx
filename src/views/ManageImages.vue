@@ -18,7 +18,6 @@
         />
       </div>
 		</div>
-
     <div class="my-2 flex items-center justify-start flex-wrap">
       <div v-for="it in prefixes" class="px-4 py-2 items-center flex rounded-lg bg-white shadow-md cursor-pointer mx-1" @click="changeFolder(it)">
         <font-awesome-icon :icon="faFolder" class="text-3xl text-amber-500" />
@@ -26,7 +25,6 @@
         <span v-else class="pl-2 text-gray-600"> {{ it }}</span>
       </div>
     </div>
-
 		<div class="grid gap-2 lg:gap-4 lg:grid-cols-4 grid-cols-2">
 			<transition-group name="el-fade-in-linear">
 				<div
@@ -41,33 +39,6 @@
 						@delete="deleteImage(item.key)"
 						mode="uploaded"
 					/>
-
-          <!-- 原本的链接按钮 -->
-          <div class="mt-2">
-            <button
-              @mouseenter="showFormats = item.key"
-              @mouseleave="showFormats = null"
-              class="text-sm text-blue-500 hover:underline"
-            >
-              链接
-            </button>
-
-            <!-- 鼠标悬停时显示不同格式的链接 -->
-            <div v-if="showFormats === item.key" class="absolute bg-white border p-2 shadow-md mt-2 w-48">
-              <p><strong>Markdown 格式：</strong></p>
-              <div class="cursor-pointer" @click="copyLink(`![${item.name}](${item.url})`)">
-                ![{{ item.name }}]({{ item.url }})
-              </div>
-              <p><strong>HTML 格式：</strong></p>
-              <div class="cursor-pointer" @click="copyLink(`<img src='${item.url}' alt='${item.name}' />`)">
-                <img :src="item.url" :alt="item.name" />
-              </div>
-              <p><strong>图片 URL：</strong></p>
-              <div class="cursor-pointer" @click="copyLink(item.url)">
-                {{ item.url }}
-              </div>
-            </div>
-          </div>
 				</div>
 			</transition-group>
 		</div>
@@ -92,15 +63,11 @@ const prefixes = ref<String[]>([])
 const imagesTotalSize = computed(() =>
     uploadedImages.value.reduce((total, item) => total + item.size, 0)
 )
-
-const showFormats = ref<string | null>(null)  // 用来显示链接格式的控制
-
 const changeFolder = (path : string) => {
   console.log(path)
   delimiter.value = path
   listImages()
 }
-
 const addFolder = () => {
   ElMessageBox.prompt('请输入目录名称，仅支持英文名称', '新增目录', {
     confirmButtonText: '创建',
@@ -122,7 +89,6 @@ const addFolder = () => {
     })
   }).catch(() => {})
 }
-
 const listImages = () => {
 	loading.value = true
 	requestListImages(<ImgReq> {
@@ -155,16 +121,4 @@ const deleteImage = (src: string) => {
 		uploadedImages.value = uploadedImages.value.filter((item) => item.key !== res)
 	})
 }
-
-const copyLink = (link: string) => {
-  navigator.clipboard.writeText(link).then(() => {
-    ElMessage.success('复制成功！')
-  }).catch(() => {
-    ElMessage.error('复制失败！')
-  })
-}
 </script>
-
-<style scoped>
-/* 可以根据需要添加一些样式 */
-</style>

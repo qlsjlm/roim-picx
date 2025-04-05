@@ -41,9 +41,9 @@
 						@delete="deleteImage(item.key)"
 						mode="uploaded"
 					/>
-					
-          <!-- 复制链接按钮，悬停时显示多个链接格式 -->
-          <div class="mt-2 relative">
+
+          <!-- 原本的链接按钮 -->
+          <div class="mt-2">
             <button
               @mouseenter="showFormats = item.key"
               @mouseleave="showFormats = null"

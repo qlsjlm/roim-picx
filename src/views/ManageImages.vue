@@ -39,17 +39,33 @@
 						@delete="deleteImage(item.key)"
 						mode="uploaded"
 					/>
-
-          <!-- Markdown 格式链接 -->
+          
+          <!-- 复制链接按钮 -->
           <div class="mt-2">
-            <p><strong>Markdown 格式：</strong></p>
-            <pre><code>![{{ item.name }}]({{ item.url }})</code></pre>
-          </div>
-
-          <!-- HTML 格式链接 -->
-          <div class="mt-2">
-            <p><strong>HTML 格式：</strong></p>
-            <pre><code>&lt;img src="{{ item.url }}" alt="{{ item.name }}" /&gt;</code></pre>
+            <button
+              @mouseenter="showFormats = item.key" 
+              @mouseleave="showFormats = null"
+              @click="copyLink(item.url)"
+              class="text-sm text-blue-500 hover:underline"
+            >
+              复制图片链接
+            </button>
+            
+            <!-- 链接格式显示 (Markdown & HTML) -->
+            <div v-if="showFormats === item.key" class="bg-gray-100 p-2 mt-2 rounded shadow-md">
+              <p><strong>Markdown 格式：</strong></p>
+              <div class="cursor-pointer" @click="copyLink(`![${item.name}](${item.url})`)">
+                ![{{ item.name }}]({{ item.url }})
+              </div>
+              <p><strong>HTML 格式：</strong></p>
+              <div class="cursor-pointer" @click="copyLink(`<img src='${item.url}' alt='${item.name}' />`)">
+                <img src='{{ item.url }}' alt='{{ item.name }}' />
+              </div>
+              <p><strong>图片 URL：</strong></p>
+              <div class="cursor-pointer" @click="copyLink(item.url)">
+                {{ item.url }}
+              </div>
+            </div>
           </div>
 				</div>
 			</transition-group>
@@ -75,11 +91,15 @@ const prefixes = ref<String[]>([])
 const imagesTotalSize = computed(() =>
     uploadedImages.value.reduce((total, item) => total + item.size, 0)
 )
+
+const showFormats = ref<string | null>(null)  // 用来显示链接格式的控制
+
 const changeFolder = (path : string) => {
   console.log(path)
   delimiter.value = path
   listImages()
 }
+
 const addFolder = () => {
   ElMessageBox.prompt('请输入目录名称，仅支持英文名称', '新增目录', {
     confirmButtonText: '创建',
@@ -101,6 +121,7 @@ const addFolder = () => {
     })
   }).catch(() => {})
 }
+
 const listImages = () => {
 	loading.value = true
 	requestListImages(<ImgReq> {
@@ -109,28 +130,3 @@ const listImages = () => {
   }).then((data) => {
     uploadedImages.value = data.list
     if (data.prefixes && data.prefixes.length) {
-      prefixes.value = data.prefixes
-      if (delimiter.value !== '/') {
-        prefixes.value = ['/', ...data.prefixes]
-      }
-    } else {
-      prefixes.value = ['/']
-    }
-  }).catch(() => {})
-		.finally(() => {
-			loading.value = false
-		})
-}
-
-onMounted(() => {
-	listImages()
-})
-
-const deleteImage = (src: string) => {
-	requestDeleteImage({
-    keys: src
-  }).then((res) => {
-		uploadedImages.value = uploadedImages.value.filter((item) => item.key !== res)
-	})
-}
-</script>

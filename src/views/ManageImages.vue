@@ -41,20 +41,19 @@
 						@delete="deleteImage(item.key)"
 						mode="uploaded"
 					/>
-          
-          <!-- 复制链接按钮 -->
-          <div class="mt-2">
+					
+          <!-- 复制链接按钮，悬停时显示多个链接格式 -->
+          <div class="mt-2 relative">
             <button
-              @mouseenter="showFormats = item.key" 
+              @mouseenter="showFormats = item.key"
               @mouseleave="showFormats = null"
-              @click="copyLink(item.url)"
               class="text-sm text-blue-500 hover:underline"
             >
-              复制图片链接
+              链接
             </button>
-            
-            <!-- 链接格式显示 (Markdown & HTML) -->
-            <div v-if="showFormats === item.key" class="bg-gray-100 p-2 mt-2 rounded shadow-md">
+
+            <!-- 鼠标悬停时显示不同格式的链接 -->
+            <div v-if="showFormats === item.key" class="absolute bg-white border p-2 shadow-md mt-2 w-48">
               <p><strong>Markdown 格式：</strong></p>
               <div class="cursor-pointer" @click="copyLink(`![${item.name}](${item.url})`)">
                 ![{{ item.name }}]({{ item.url }})

@@ -18,6 +18,7 @@
         />
       </div>
 		</div>
+
     <div class="my-2 flex items-center justify-start flex-wrap">
       <div v-for="it in prefixes" class="px-4 py-2 items-center flex rounded-lg bg-white shadow-md cursor-pointer mx-1" @click="changeFolder(it)">
         <font-awesome-icon :icon="faFolder" class="text-3xl text-amber-500" />
@@ -25,6 +26,7 @@
         <span v-else class="pl-2 text-gray-600"> {{ it }}</span>
       </div>
     </div>
+
 		<div class="grid gap-2 lg:gap-4 lg:grid-cols-4 grid-cols-2">
 			<transition-group name="el-fade-in-linear">
 				<div
